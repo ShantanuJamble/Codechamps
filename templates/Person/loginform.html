@@ -1,0 +1,35 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>CodeChamps Login </title>
+    {% include 'includes.html' %}
+
+</head>
+<body>
+<br>
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        <form id="loginform" class='form-horizontal' method="post" action="/login/">
+            {% csrf_token %}
+            <input class="form-control" id="username" name="username" type="text" placeholder="Username/Email-ID"/>
+            <br>
+            <input class="form-control" type="password" id="password" name='password' placeholder='Password'/>
+            <br>
+            <input class="btn btn-primary " type="submit" value="Log In" align="right">
+        </form>
+        <h4>
+            Not Yet registered?? <a href="/register/">Sign up </a>now!
+        </h4>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,144 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+    <title>{{ problem.title }}</title>
+    {% include 'includes.html' %}
+    {% include 'navbar.html' %}
+</head>
+<body>
+<div class="row">
+    <div class="col-md-1"></div>
+    <!-- Problem Part-->
+    <div class="col-md-7">
+        {% if not message %}
+            <div class="alert alert-warning " role="alert">You need To be logged in to solve the problems.Go to <a
+                    href="/"><b>link.</b></a></div>
+        {% endif %}
+        {% if  problem %}
+            <h1>{{ problem.title }}</h1>
+
+            <div class="well">
+
+                {% autoescape off %}{{ problem.body }}{% endautoescape %}
+                <br><br>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4>Input Sample:</h4>
+                        <samp>
+                            {% autoescape off %}{{ problem.input_sample }}{% endautoescape %}
+                        </samp>
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-6">
+                        <h4>Output Sample:</h4>
+                        <samp>
+                            {% autoescape off %}{{ problem.output_sample }}{% endautoescape %}
+                        </samp>
+                    </div>
+                </div>
+                <br><br>
+
+                <p><b>Domain:</b><i>  {{ problem.domain }}</i></p>
+
+                <p><b>Testing Time Per Input File:</b> <i>{{ problem.test_time }}</i></p>
+                <p><b>Max Marks:</b><i>  {{ max_marks }}</i></p>
+                <hr>
+                {% include 'code-editor.html' %}
+                <br>
+                {% if user.is_authenticated %}
+                    <div class="row">
+                        <div class="col-md-2">
+                            <button class="btn btn-success" onclick="submit_solution({{ problem.id }})" id="submit"
+                                    name="submit">Submit
+                            </button>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary" onclick="submit_trial_solution({{ problem.id }})"
+                                    id="compile">Compile & Run
+                            </button>
+                        </div>
+                    </div>
+                {% endif %}
+                <br>
+
+                <div id="loader" align="center">
+                    <img src="{% static 'img/ajax-loader.gif' %}">
+                </div>
+                <div id="result">
+
+                </div>
+            </div>
+        {% endif %}
+        <script src="{% static 'js/submit-solution.js' %}"></script>
+    </div>
+    <div class="col-md-3">
+        <br><br>
+        <br>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>Problem Stats</h4>
+            </div>
+            <div class="panel-body">
+                <p><b>Total Submissions:{{ total_submissions }}</b></p>
+
+                <p><b>Accepted Submissions:{{ accepted_submission }}</b></p>
+
+                <p><b>Your Submissions:{{ person_submission_count }}</b></p>
+
+            </div>
+        </div>
+        <br><br>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>Your Submissions</h4>
+            </div>
+            <div class="panel-body">
+                {% if person_submission %}
+                    <table class="table table-striped">
+                        <tr>
+                            <td></td>
+                            <td>Status</td>
+                            <td>Marks</td>
+                        </tr>
+                        {% for submission in person_submission %}
+                            <tr>
+                                <p><b><td> <a href="/submissions/{{ problem_id }}/{{ submission.id}}/{{ forloop.counter }}">Submission {{ forloop.counter }}</a></td>
+                                    <td>&nbsp;&nbsp;{{ submission.status }}</td>
+                                    <td>&nbsp;&nbsp;{{ submission.marks }}</td>
+                                </b></p>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% else %}
+                {% endif %}
+
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>Legends</h4>
+            </div>
+            <div class="panel-body">
+                <p class="text-success"><b>AC</b>=Accepted</p>
+
+                <p class="text-danger"><b>WA</b>=Wrong Answer</p>
+
+                <p class="text-warning"><b>TLE</b>=Time Limit Exceeded</p>
+
+                <p class="text-warning"><b>NZEC</b>=Runtime Exception</p>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+
+
+</div>
+</body>
+</html>

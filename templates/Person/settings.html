@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Profile Settings</title>
+    {% include 'includes.html' %}
+    <script>
+        $(document).ready(function () {
+            $("#password1").keyup(checkPasswordMatch);
+        });
+        function checkPasswordMatch() {
+            var password = $("#password").val();
+            var confirmPassword = $("#password1").val();
+            if (password != "")
+                if (password != confirmPassword)
+                    $("#match").html("<p></b>Passwords do not match!</b></p>");
+                else
+                    $("#match").html("<p></b>Passwords match!</b></p>");
+        }
+        $(function () {
+            $("#form2").validate({
+                rules: {
+                    password: {
+                        required: true
+                    },
+                    password1: {
+                        required: true
+
+                    }
+                },
+                messages: {
+
+                    password: {
+                        required: "Password Required"
+                    },
+                    password1: {
+                        required: "Retype Password"
+
+                    }
+                }
+            });
+        });
+        $(function () {
+            $("#form1").validate({
+                rules: {
+                    name: {
+                        required: true
+                    },
+                    country: {
+                        required: true
+                    }
+                },
+                messages: {
+                    name: {
+                        required: "How's That possible??"
+                    },
+                    country: {
+                        required: "Are u phantom??"
+                    }
+                }
+            });
+        });
+
+        //Ajax Update
+        $(document).ready(function () {
+
+            // using jQuery
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            var csrftoken = getCookie('csrftoken');
+
+            //Profile Updation Ajax query
+            $("#form1").submit(function () {
+                var name = $("#name").val();
+                var country = $("#country").val();
+                {
+                    $.ajax({
+                        type: "POST",
+                        url: "/updateprofile/",
+                        data: {"name": name, "country": country},
+                        success: updateSuccess,
+                        headers: {
+                            'X-CSRFToken': csrftoken
+                        },
+                        dataType: 'html',
+                    });
+                    //alert($("#search").val());
+                }
+                return false;
+            });
+
+
+            //Password Updation Ajax query
+            $("#form2").submit(function () {
+                var password = $("#password").val();
+                var password1 = $("#password1").val();
+                {
+                    $.ajax({
+                        type: "POST",
+                        url: "/changepassword/",
+                        data: {"password": password, "password1": password1},
+                        success: passwordupdateSuccess,
+                        headers: {
+                            'X-CSRFToken': csrftoken
+                        },
+                        dataType: 'html'
+                    });
+                    //alert($("#search").val());
+                }
+                return false;
+            });
+            function updateSuccess(data, status, jqXHR) {
+                $("#results_1").html(data);
+            }
+
+            function passwordupdateSuccess(data, status, jqXHR) {
+                $("#results_2").html(data);
+            }
+        })
+
+
+    </script>
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-3">
+            <div class="well well-lg">
+
+                <p><b><a href="#profile_update" style="color: #2C3E50;"> Profile Update</a></b></p>
+                <p><b><a href="#password_reset" style="color: #2C3E50;"> Password Reset</a></b></p>
+            </div>
+        </div>
+        <div class="col-md-8">
+
+            <div class="panel panel-primary" id="profile_update">
+                <div class="panel-heading">Profile Update</div>
+                <div class="panel-body">
+                    <form id="form1" action="" method="post">
+                        {% csrf_token %}
+                        <input class="form-control" id="name" name="name" type="text"
+                               value="{{ person.user.first_name }}"/><br>
+                        <input class="form-control" name="country" id="country" type="text"
+                               value="{{ person.country }}"/><br>
+                        <input id="updateprofile" class="btn btn-primary" type="submit" value="save"/>
+
+                        <div id="results_1">
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <br>
+            <hr>
+            <div class="panel panel-primary" id="password_reset">
+                <div class="panel-heading">Password Reset</div>
+                <div class="panel-body">
+                    <form id="form2" action="" method="post">
+                        {% csrf_token %}
+                        <input class="form-control" type="password" id="password" name='password'
+                               placeholder='Password'/><br>
+                        <input class="form-control" type="password" id="password1" name='password1'
+                               placeholder='Re-enter your password'/><br>
+
+                        <p id="match"></p>
+                        <input class="btn btn-primary" type="submit" value="save"/>
+
+                        <div id="results_2">
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

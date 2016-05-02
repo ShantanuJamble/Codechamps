@@ -1,0 +1,105 @@
+<div class="row">
+    {% ifequal status 'SC' %}
+
+        <p class="text-center" style="color:Red"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"
+                                                       style="color:RED; size=24px">   </span><b>{{ result }}</b></p>
+    {% endifequal %}
+    {% ifequal status 'duplicate' %}
+        <p class="text-center"><b>Same submission is already Submitted.</b></p>
+    {% endifequal %}
+    {% ifequal status 'CE' %}
+        <div class="col-md-3">
+            <p class="text-center"><b>Compile Time Error</b></p>
+        </div>
+        <div class="col-md-3">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"
+                      style="color:darkgoldenrod;size=24px;"></span>
+        </div>
+        <div class="col-md-3">
+            <p><b>{{ marks }}</b></p>
+        </div>
+        <div class="col-md-3">
+            MEMORY DISPLAY&TIME
+        </div>
+    {% endifequal %}
+    {% ifequal status 'AC' %}
+        <div class="col-md-3">
+            <p class="text-center"><b>ACCEPTED</b></p>
+        </div>
+        <div class="col-md-3">
+            <span class="glyphicon glyphicon-ok" aria-hidden="true" style="color:green;size=24px;"></span>
+        </div>
+        <div class="col-md-3">
+            <p><b>{{ marks }}</b></p>
+        </div>
+        <div class="col-md-3">
+            MEMORY DISPLAY&TIME
+        </div>
+    {% endifequal %}
+    {% ifequal status 'NZEC' %}
+        <div class="col-md-3">
+            <p class="text-center"><b>NZEC</b></p>
+        </div>
+        <div class="col-md-3">
+            <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"
+                  style="color:darkgoldenrod;size=24px;"></span>
+        </div>
+        <div class="col-md-3">
+            <p><b>{{ marks }}</b></p>
+        </div>
+        <div class="col-md-3">
+            MEMORY DISPLAY&TIME
+        </div>
+    {% endifequal %}
+    {% ifequal status 'WA' %}
+        <div class="col-md-3">
+            <p class="text-center"><b>WRONG ANSWER</b></p>
+        </div>
+        <div class="col-md-3">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:RED;size=24px;"></span>
+        </div>
+        <div class="col-md-3">
+            <p><b>{{ marks }}</b></p>
+        </div>
+        <div class="col-md-3">
+            MEMORY DISPLAY&TIME
+        </div>
+    {% endifequal %}
+    {% ifequal status 'TLE' %}
+        <div class="col-md-3">
+            <p class="text-center"><b>Time Limit Exceeded</b></p>
+        </div>
+        <div class="col-md-3">
+            <span class="glyphicon glyphicon-dashboard" aria-hidden="true" style="color:RED;size=24px;"></span>
+        </div>
+        <div class="col-md-3">
+            <p><b>{{ marks }}</b></p>
+        </div>
+        <div class="col-md-3">
+            MEMORY DISPLAY&TIME
+        </div>
+    {% endifequal %}
+
+</div>
+{% if result %}
+    {% ifnotequal status 'SC' %}
+        {% ifnotequal status 'duplicate' %}
+            {% ifequal status 'CE' %}
+                <samp>
+                    {% autoescape off %}{{ result }}{% endautoescape %}
+                </samp>
+            {% endifequal %}
+
+            {% ifnotequal status 'CE' %}
+                <table class="table table-striped">
+                    {% for res in result %}
+                        <tr>
+                            <td><b><i>TestCase File {{ forloop.counter }}</i></b></td>
+                            <td>{{ res }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endifnotequal %}
+        {% endifnotequal %}
+    {% endifnotequal %}
+{% endif %}

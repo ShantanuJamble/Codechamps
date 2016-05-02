@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Add questions to {{ quiz }}</title>
+    {% include 'includes.html' %}
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="container-fluid">
+    {{ message }}
+    <h4>{{ quiz }}</h4>
+    {% if mcqform == None %}
+        fufufufu
+    {% endif %}
+    <form class="input-group">
+        {{ mcqform }}
+
+    </form>
+
+
+
+</div>
+</body>
+</html>

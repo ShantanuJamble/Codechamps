@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{{ person_profile }}</title>
+    <script>
+        $(document).ready(function () {
+            $("#picbutton").hide();
+            $("#profilepic").mouseenter(function () {
+                $("#picbutton").show();
+            });
+            $("#profilepic").mouseleave(function () {
+                $("#picbutton").hide();
+            });
+        });
+    </script>
+</head>
+<body>
+{% if activate_message %}
+    <div class="alert alert-warning alert-dismissible" role="alert"
+         style="margin-bottom: 0px;border-radius: 0px; text-align: center;">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                aria-hidden="true">&times;</span>
+        </button>
+        <strong>Warning!</strong> {{ activate_message }}
+    </div>
+{% endif %}
+{% include 'navbar.html' %}
+<div class="row">
+    <div class="col-md-1"></div>
+    <!--Profile pic block-->
+    <div class="col-md-3" id="profilepic">
+        <!--person_profile stands for persons whose profile being visited it may be the user itself or any
+            other persons-->
+        {% if not person_profile.propic %}
+            <img src="{% static 'img/profile.jpg' %}" class="img-thumbnail"
+                 style="width:250px;height:250px;float:right;align:center;margin-right: 14.5%;">
+        {% else %}
+            <img src="{{ person_profile.propic.url }}" class="img-thumbnail img-responsive"
+                 style="width:250px;height:250px;float:right;align:center;margin-right: 14.5%;">
+        {% endif %}
+        <br>
+        <center>
+            {% ifequal message 'null' %}
+                <button type="button" class="btn btn-primary" data-target="#updatepropic" data-toggle="modal"
+                        id="picbutton">Change Avatar
+                </button>
+            {% endifequal %}
+        </center>
+    </div>
+    <!--User details block-->
+    <div class="col-md-4 ">
+        <h3>{{ person_profile.user.first_name }}</h3>
+
+        <div style="margin-left:2%;">
+            <h5><span class="glyphicon glyphicon-envelope"> </span>&nbsp;&nbsp;&nbsp;{{ person_profile.user.email }}
+                <br></h5>
+            <h5><span class="glyphicon glyphicon-home"> </span>&nbsp;&nbsp;&nbsp;{{ person_profile.college }}
+                <br></h5>
+            <h5><span class="">With us since :<b>{{ person_profile.joined_on }}</b></span><br></h5>
+            <h5><span class=""><b>{{ person_profile.role }}</b></span><br></h5>
+            <hr>
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+    <!--follow button-->
+    <div class="col-md-2">
+        {% ifequal message 'Follow' %}
+            <a href='/follow/{{ person.ref_id }}'>
+                <button type="button" class="btn btn-primary ">Follow</button>
+            </a>
+        {% endifequal %}
+        {% ifequal person_profile.role 'TEACHER' %}
+            <a title="To add new Problems" href='/problems/add_problem'>
+                <button type="button" class="btn btn-primary" id="add">
+                    Add Problem
+                </button>
+            </a>
+            <hr>
+            <a title="To list all the problems you added" href='/problems/list_problems'>
+                <button type="button" class="btn btn-primary" id="list">
+                    List Problems
+                </button>
+            </a>
+            <hr>
+             <a title="To create new quizes!" href='/add_quiz/'>
+                <button type="button" class="btn btn-primary" id="list">
+                    Add new Quiz
+                </button>
+            </a>
+        {% endifequal %}
+    </div>
+</div>
+<div class="modal fade" id="updatepropic" role="dialog">
+    <div class="modal-dialog" style="width:50%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Update Profile Pic</h3>
+            </div>
+
+            <div class="modal-body">
+                {% include 'Person/updateprofilepic.html' %}
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

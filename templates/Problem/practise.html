@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Practise</title>
+    {% include 'navbar.html' %}
+    {% include 'includes.html' %}
+</head>
+<body>
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-6">
+        <h3>Sharpen your Blades Here!</h3>
+        {% if not message %}
+            <div class="alert alert-warning" role="alert">You need To be logged in to solve the problems.Go to <a
+                    href="/">link.</a></div>
+        {% endif %}
+        {% if problems %}
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Questions</th>
+                    <th>Level</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for question  in problems %}
+                    <tr class="">
+                        <td><h4>{{ question.title }}</h4></td>
+                        <td><h4>{{ question.difficulty }}</h4></td>
+                        {% if message %}
+                            <td>
+                                {% if solved_list %}
+                                    {% if question.id in solved_list %}
+                                        <a href="problems/solve/{{ question.id }}">
+                                            <button class="btn btn-success">Try Again
+                                            </button>
+                                        </a>
+                                    {% else %}
+                                        <a href="problems/solve/{{ question.id }}">
+                                            <button class="btn btn-primary">Solve Now
+                                            </button>
+                                        </a>
+                                    {% endif %}
+                                {% else %}
+                                    <a href="problems/solve/{{ question.id }}">
+                                        <button class="btn btn-primary">Solve Now
+                                        </button>
+                                    </a>
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td>Solve</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{% load static %}
+<script src="{% static 'js/ace-editor/ace.js' %}" type="text/javascript"
+        charset="utf-8"></script>
+
+
+<div class="row">
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary" id="lang_choose">C</button>
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li id="c"><a href="#lang_choose">C</a></li>
+            <li id="cpp"><a href="#lang_choose">CPP</a></li>
+            <li id="java"><a href="#lang_choose">JAVA</a></li>
+            <li id="python"><a href="#lang_choose">Python</a></li>
+        </ul>
+    </div>
+    <br>
+    <br>
+
+    <div class="col-md-12" id="inner-editor" style="height:500px;"></div>
+
+</div>
+<script src="{% static 'js/code-editor.js' %}"></script>

@@ -1,0 +1,8 @@
+{% ifequal message 'success'%}
+<span class="glyphicon glyphicon-ok" style="color:green">
+    <p style="color:green">Updated SuccessFully!</p>
+</span>
+{% else %}
+<span class="glyphicon glyphicon-remove" style="color:red"></span>
+    <p style="color:red">Updation Failed!</p>
+{% endifequal %}

@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>404 page not found</title>
+    {% include 'includes.html' %}
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+        <div class="container-fluid">
+            <div class="jumbotron">
+                <div class="row">
+                    <div class="col-sm-6 col-md-6">
+                        <p class="text-primary">The page you requested could not be found. Use your browsers
+                            Back button to navigate to the page you have previously come from
+                            Or you could just press this neat little button:</p><br>
+                        <a href="/" class="btn btn-info">
+                            <span class="glyphicon-home"></span>
+                            Take me home
+                        </a>
+                    </div>
+                    <div class="col-sm-6 col-md-6">
+                        <img src="{% static 'img/404.png' %}" class="img-thumbnail"
+                             width="300" height="300">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-2"></div>
+</div>
+</body>

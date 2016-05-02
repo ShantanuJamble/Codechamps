@@ -1,0 +1,61 @@
+{% load static %}
+<div class="container-fluid">
+    {% if  problem %}
+        <h1>{{ problem.title }}</h1>
+
+        <div class="well">
+
+            {% autoescape off %}{{ problem.body }}{% endautoescape %}
+            <br><br>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <h4>Input Sample:</h4>
+                    <samp>
+                        {% autoescape off %}{{ problem.input_sample }}{% endautoescape %}
+                    </samp>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-6">
+                    <h4>Output Sample:</h4>
+                    <samp>
+                        {% autoescape off %}{{ problem.output_sample }}{% endautoescape %}
+                    </samp>
+                </div>
+            </div>
+            <br><br>
+
+            <p><b>Domain:</b><i>  {{ problem.domain }}</i></p>
+
+            <p><b>Testing Time Per Input File:</b> <i>{{ problem.test_time }}</i></p>
+
+            <p><b>Max Marks:</b><i>  {{ max_marks }}</i></p>
+            <hr>
+            {% include 'code-editor.html' %}
+            <br>
+            {% if user.is_authenticated %}
+                <div class="row">
+                    <div class="col-md-2">
+                        <button class="btn btn-success" onclick="submit_solution({{ problem.id }})" id="submit"
+                                name="submit">Submit
+                        </button>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary" onclick="submit_trial_solution({{ problem.id }})"
+                                id="compile">Compile & Run
+                        </button>
+                    </div>
+                </div>
+            {% endif %}
+            <br>
+
+            <div id="loader" align="center">
+                <img src="{% static 'img/ajax-loader.gif' %}">
+            </div>
+            <div id="result">
+
+            </div>
+        </div>
+    {% endif %}
+    <script src="{% static 'js/submit-solution.js' %}"></script>
+</div>

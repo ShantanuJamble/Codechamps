@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>CodeChamps</title>
+
+</head>
+<body>
+{% include 'index_navbar.html' %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+
+        </div>
+        <div class="col-md-4 portfolio-item">
+            <div class="tabbable">
+                <ul class="nav nav-tabs">
+                    <li class="active center-block"><a href="#tab1" data-toggle="tab">Login</a></li>
+
+                    <li class="center-block"><a href="#tab2" data-toggle="tab">Register</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active " id="tab1">
+
+                        {% include 'loginform.html' %}
+                    </div>
+                    <div class="tab-pane" id="tab2">
+                        {% include 'registerform.html' %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+
+</body>
+</html>

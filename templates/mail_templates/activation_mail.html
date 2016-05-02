@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #2C3E50;
+        }
+
+        li {
+            float: left;
+        }
+
+        li a {
+            display: inline-block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            text-decoration-color: #FFFFCC;
+        }
+
+        li a:hover {
+            background-color: #18BC9C;;
+        }
+    </style>
+</head>
+<body>
+
+<ul>
+    <li style="align-self: center;"><a class="active" href="http://127.0.0.1:8000">CodeChamps</a></li>
+</ul>
+<h4>Hi {{ user }}</h4>
+please complete your email verification by clicking on the link below:
+
+{{ activation_url }}
+
+<h5>Welcome to Our Family!</h5>
+<ul>
+    <li style="align-self: center;"><a class="active" href="http://127.0.0.1:8000">Thank You!</a></li>
+</ul>
+
+
+</body>
+</html>

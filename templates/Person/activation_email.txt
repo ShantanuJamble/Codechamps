@@ -1,0 +1,8 @@
+Hi {{user}},
+
+Activate Your Account by clicking on following link.
+
+{{activation_url}}
+
+Thank You!!
+-Codechamps

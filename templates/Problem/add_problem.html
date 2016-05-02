@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>ADD PROBLEM</title>
+    {% include 'includes.html' %}
+    {% include 'navbar.html' %}
+
+    <script src="http://cdn.ckeditor.com/4.5.2/standard-all/ckeditor.js"></script>
+
+    <script>
+        //JQuery form validation
+        $(document).ready(function () {
+            CKEDITOR.replace('body');
+            $("#input_files").focusout(checkCountIn);
+            $("#output_files").focusout(checkCountOut);
+            $("#domain").focusout(checkDomain);
+        });
+        function checkCountIn() {
+            var number = $("#test_count").val();
+            var file_count = document.getElementById('input_files');
+            if (number != file_count.files.length)
+                alert("Number of Intput files is not matching the test count");
+        }
+        function checkCountOut() {
+            var number = $("#test_count").val();
+            var file_count = document.getElementById('output_files');
+            if (number != file_count.files.length)
+                alert("Number of Output files is not matching the test count");
+        }
+        function checkDomain() {
+            var domain = $("#domain").val();
+            alert(domain=="Practise");
+        }
+        $(function () {
+            $("#problem_form").validate({
+                rules: {
+                    title: {
+                        required: true,
+                        maxlength: 50
+                    },
+                    body: {
+                        required: true,
+                        maxlength: 1000
+                    },
+                    test_count: {
+                        required: true,
+                        number: true
+                    },
+                    test_time: {
+                        required: true,
+                        number: true
+                    },
+                    input_sample: {
+                        required: true,
+                        maxlength: 100
+                    },
+                    output_sample: {
+                        required: true,
+                        maxlength: 100
+                    },
+                    input_files: {
+                        required: true,
+                        extension: 'txt'
+
+                    },
+                    output_files: {
+                        required: true,
+                        extension: 'txt'
+
+                    },
+                    domain: {
+                        required: true,
+                        maxlength: 50
+                    },
+                    difficulty: {
+                        required: true,
+                        maxlength: 8
+                    }
+                },
+                messages: {
+                    title: {
+                        required: 'Title is required.',
+                        maxlength: 'Please enter no more than 20 chars'
+                    },
+                    body: {
+                        required: 'Question description is required.'
+
+                    },
+                    input_sample: {
+                        required: 'input sample is required.'
+                    },
+                    output_sample: {
+                        required: 'output sample is required.'
+                    },
+                    test_count: {
+                        required: 'Give me file count.'
+                    },
+                    test_time: {
+                        required: 'Give me testing time man!!.'
+                    },
+                    domain: {
+                        required: 'Domain is required.'
+                    },
+                    input_files: {
+                        required: 'This Field is required',
+                        extension: 'Only .txt file can be uploaded'
+                    },
+                    output_files: {
+                        required: 'This Field is required',
+                        extension: 'Only .txt file can be uploaded'
+                    },
+                    difficulty: {
+                        required: 'This cannot be empty'
+                    }
+                }
+            });
+        });
+    </script>
+
+</head>
+<body>
+<div class="row">
+
+    <div class="col-md-3">
+        <center><h3 style="color: #161f29">PROBLEM FORM</h3></center>
+    </div>
+    <div class="col-md-5">
+        {{ message }}
+        <form id="problem_form" class='form-horizontal' method="POST" enctype="multipart/form-data"
+              action="/problems/add_problem/">
+            {% csrf_token %}
+            <input type="text" class="form-control" placeholder="Problem Title" id="title"
+                   name="title"><br>
+
+            <textarea class="form-control" placeholder="Description" id="body" name="body" form="problem_form">
+            </textarea>
+            <br><br>
+            <textarea class="form-control" placeholder="input sample" id="input_sample" name="input_sample"
+                      form="problem_form">Sample input
+            </textarea>
+            <br><br>
+            <textarea class="form-control" placeholder="output sample" id="output_sample" name="output_sample"
+                      form="problem_form">Sample Output
+            </textarea>
+            <br>
+            <input class="form-control" type="text" id="difficulty" name="difficulty" value="easy"
+                   placeholder="difficulty level"/>
+            <br>
+            <input class="form-control" type="number" id="test_count" name="test_count" placeholder="No of test Files">
+            <br>
+
+            <br>
+            <label>Input Samples:</label>
+            <input type="file" name="input_files" id="input_files" multiple/>
+            <br>
+
+            <label>Output Samples:</label>
+            <input type="file" name="output_files" id="output_files" multiple/>
+            <br>
+
+            <input class="form-control" type="number" id="test_time" name="test_time"
+                   placeholder="Time For each test case">
+            <br>
+            <label for="domain">Select A cateogory:</label>
+            <select class="form-control" name="domain" id="domain">
+                {% for cat in category_list %}
+                <option>{{ cat }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <label for="quiz">Add problem to quiz:</label>
+            <select class="form-control" name="quiz" id="quiz">
+                {% for quiz in quiz_list %}
+                <option>{{ quiz }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <center><input class="btn btn-primary" type="submit" value="Add Problem"/></center>
+        </form>
+    </div>
+</div>
+
+
+</body>
+</html>

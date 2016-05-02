@@ -1,0 +1,114 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Add New Quiz</title>
+    {% include 'navbar.html' %}
+    {% include 'includes.html' %}
+    <script>
+        $(function () {
+
+            $("#add_quiz_form").validate({
+                rules: {
+                    title: {
+                        required: true
+                    },
+                    body: {
+                        required: true
+                    },
+                    dp: {
+                        required: true,
+                        extension: 'png|jpg'
+                    }
+                },
+                messages: {
+                    title: {
+                        required: "Title is required"
+                    },
+                    body: {
+                        required: "Provide Description."
+                    },
+                    dp: {
+                        required: "You must add new Image man!!",
+                        extension: "Only png and jpg formats are accepted"
+                    }
+                }
+            });
+        });
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="http://cdn.ckeditor.com/4.5.2/standard-all/ckeditor.js"></script>
+    <script>
+        $(document).ready(function () {
+            CKEDITOR.replace('body');
+        });
+
+
+    </script>
+</head>
+<body>
+{{ form.media }}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-2 col-md-2">
+            {% if message %}
+                {{ message }}
+            {% endif %}
+        </div>
+        <div class="col-sm-8 col-md-8">
+            <form id='add_quiz_form' action="/add_quiz/" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="input-group">
+
+                    {{ form.title.errors }}
+                    {{ form.title }}
+                    <br>
+                    <br>
+                    <br>
+                    <h5></h5>
+                    <textarea class="form-control" placeholder="Description" id="body" name="body"
+                              form="add_quiz_form">Provide Description</textarea>
+                    <br>
+                    <br>
+                    {{ form.single.errors }}
+                    <label for="single">Single Attempt</label>&nbsp;&nbsp;{{ form.single }}
+
+                    <br>
+                    <br>
+                    {{ form.single.errors }}
+                    <label for="random">Random Order</label>&nbsp;&nbsp;{{ form.random }}
+                    <br>
+                    <br>
+                    {{ form.category.errors }}
+                    <label for="id_category">Category:</label>
+
+                    {{ form.category }}
+                    <br>
+                    <br>
+                    {{ form.start_date_time.errors }}
+                    <label for="start_date_time">Start Time</label>
+                    {{ form.start_date_time }}
+
+                    {{ form.end_date_time.errors }}
+                    <label for="end_date_time">End Time</label>
+                    {{ form.end_date_time }}
+                    <br><br>
+                    <label for="duration">Duration:</label>
+                    {{ form.duration }}
+                    <br><br>
+                    <label for="dp">Display Picture</label>
+                    <input class="form-row" type="file" name="dp" id="dp" placeholder=""/><br>
+                </div>
+
+                <br>
+                <center><input class="btn btn-primary" type="submit" value="Add Quiz"></center>
+            </form>
+        </div>
+        <div class="col-sm-2 col-md-2"></div>
+    </div>
+</div>
+</body>

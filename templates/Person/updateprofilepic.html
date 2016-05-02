@@ -1,0 +1,57 @@
+{% load static %}
+{% include 'includes.html' %}
+<script>
+    $(function () {
+        $("#uploadpropic").validate({
+            rules: {
+
+                image: {
+                    required: true,
+                    extension: 'png|jpg'
+
+                }
+
+            },
+            messages:{
+                image:{
+                    required:"You must add new Image man!!",
+                    extension:"Only png and jpg formats are accepted!"
+                }
+            }
+        });
+    });
+</script>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div>
+                {% if not person.propic %}
+                    <img src="{% static 'img/profile.jpg' %}" class="img-thumbnail" style="width:300px;height:300px;">
+                {% else %}
+                    <img src="{{ person.propic.url }}" class="img-thumbnail" style="width:300px;height:300px;">
+                {% endif %}
+            </div>
+            <br>
+            <br>
+
+
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-3">
+            <form id="uploadpropic" action="/uploadprofilepic/" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input class="form-row" type="file" name="image" id="image" placeholder=""/><br>
+                <input type="submit" class="btn btn-primary " value="Update Profile Pic "/>
+
+            </form>
+            <br>
+
+            <a href='/removeprofilepic/'>
+                <button class='btn btn-primary'>Remove Profile Pic</button>
+            </a>
+        </div>
+        <div class='col-md-3'>
+
+        </div>
+    </div>
+</div>

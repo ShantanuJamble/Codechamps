@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{{ quiz.title }}</title>
+    {% include 'includes.html' %}
+    <script>
+        $(document).ready(function () {
+            time ={{ milliseconds }};
+            start_countdown({{ milliseconds }}, {{ quiz.id}});
+
+        });
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+        $(document).ready(function () {
+            time ={{ milliseconds }};
+            start_countdown({{ milliseconds }}, {{ quiz.id}});
+
+        });
+        function get_question(question_id) {
+            {
+                $.ajax({
+                    type: "POST",
+                    url: "/mcqs/" + question_id.toString() + '/',
+                    data: {"quiz": $("h4").text(),
+                        "sitting_id": $("#sitting_id").text()},
+                    success: updateQuestion,
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    dataType: 'html'
+                });
+
+            }
+            return false;
+        }
+
+        function get_program(question_id) {
+            {
+                alert(""+question_id);
+                $.ajax({
+                    type: "POST",
+                    url: "/get/program/" + question_id.toString() + '/',
+                    data: {"quiz": $("h4").text(),
+                        "sitting_id": $("#sitting_id").text()},
+                    success: updateQuestion,
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    dataType: 'html'
+                });
+
+            }
+            return false;
+        }
+
+        function updateQuestion(data, status, jqXHR) {
+            alert('asdg');
+            $("#question_details").html(data);
+        }
+    </script>
+
+</head>
+<body>
+{% include 'navbar.html' %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-1">
+
+        </div>
+        <div class="col-sm-10">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h1>{{ quiz.title }}</h1>
+                    <h5>Start date={{ quiz.start_time }}</h5>
+                    <h5>Final date to submit={{ quiz.end_time }}</h5>
+                </div>
+                <div class="col-sm-4">
+
+                </div>
+                <div class="col-sm-4">
+                    <br>
+                    <br>
+                    {% ifequal message 'Register' %}
+                        <a href='/register/{{ quiz.id }}'>
+                            <button class="btn btn-primary">{{ message }}</button>
+                        </a>
+                    {% else %}
+                        {% ifequal message 'Participated' %}
+                            <div class="alert alert-info" role="alert">You have Paricipated in this quiz.</div>
+                        {% else %}
+                            {% ifequal message 'Started' %}
+                                <a href='/start/{{ quiz.id }}'>
+                                    <button class="btn btn-primary">Start Quiz</button>
+                                    <br>
+                                    <hr>
+                                    <div class="alert alert-info" role="alert">Quiz has started.</div>
+                                </a>
+                            {% else %}
+                                {% ifequal message 'Ended' %}
+                                    <div class="alert alert-danger" role="alert">Quiz has Ended</div>
+                                {% else %}
+                                    {% ifequal message 'Completed' %}
+                                    <div class="alert alert-info" role="alert">You have already completed this quiz!</div>
+                                    {% endifequal %}
+                            {% endifequal %}
+
+                        {% endifequal %}
+                    {% endifequal %}
+                    {% endifequal %}
+                </div>
+            </div>
+            {% if allowed %}
+                <div id="countdown" title="countdown">
+                    <span class="days">00</span>:
+                    <span class="hours">00</span>:
+                    <span class="minuits">00</span>:
+                    <span class="seconds">00</span>
+                </div>
+                <hr>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h3 id="sitting_id" hidden="hidden">{{ new_sitting }}</h3>
+
+                            <div class="btn-group-vertical" role="group" aria-label="...">
+                                {% for question in question_set %}
+                                    <button class="btn btn-info" id="button" onclick="get_question({{ question }})">
+                                        Question {{ forloop.counter }}</button>
+                                    <br>
+                                {% endfor %}
+                                {% for prg in programs %}
+                                    <button class="btn btn-primary" id="button" onclick="get_program({{ prg }})">
+                                         Program {{ forloop.counter }}</button>
+                                    <br>
+                                {% endfor %}
+                                <a href="/end/{{ quiz.id }}">
+                                    <button class="btn btn-danger">End Quiz</button>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div id="question_details">
+                            </div>
+                            <center>
+
+                            </center>
+                        </div>
+                    </div>
+                </div>
+
+
+            {% endif %}
+        </div>
+        <div class="col-sm-1">
+
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script type="text/javascript" src="{% static 'js/ext.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/countdown.jquery.js' %}"></script>
+
+</html>

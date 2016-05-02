@@ -1,0 +1,56 @@
+<div class="row">
+    {% ifequal status 'SC' %}
+
+        <p class="text-center" style="color:Red"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"
+                                                       style="color:RED; size=24px">   </span><b>{{ result }}</b></p>
+    {% endifequal %}
+    {% ifequal status 'duplicate' %}
+        <p class="text-center"><b>Same submission is already Submitted.</b></p>
+    {% endifequal %}
+    {% ifequal status 'CE' %}
+        <div class="col-md-3">
+            <p class="text-center"><b>Compile Time Error</b></p>
+        </div>
+        <div class="col-md-3">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"
+                  style="color:darkgoldenrod;size=24px;"></span>
+        </div>
+    {% endifequal %}
+
+    {% ifequal status 'NZEC' %}
+        <div class="col-md-3">
+            <p class="text-center"><b>NZEC</b></p>
+        </div>
+        <div class="col-md-3">
+            <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"
+                  style="color:darkgoldenrod;size=24px;"></span>
+        </div>
+
+    {% endifequal %}
+    {% ifequal status 'TLE' %}
+        <div class="col-md-3">
+            <p class="text-center"><b>Time Limit Exceeded</b></p>
+        </div>
+        <div class="col-md-3">
+            <span class="glyphicon glyphicon-dashboard" aria-hidden="true" style="color:RED;size=24px;"></span>
+        </div>
+    {% endifequal %}
+
+</div>
+{% ifnotequal status 'SC' %}
+    {% ifnotequal status 'duplicate' %}
+        {% ifequal status 'CE' %}
+            <samp>
+                {% autoescape off %}{{ result }}{% endautoescape %}
+            </samp>
+        {% endifequal %}
+
+        {% ifnotequal status 'CE' %}
+            <p>Program Executed Successfully!</p>
+            <p><b>Expected Output:</b></p><br>
+            {% autoescape off %}{{ expected }}{% endautoescape %}
+            <p><b>Your Output</b></p><br>
+            {% autoescape off %}{{ result }}{% endautoescape %}
+        {% endifnotequal %}
+    {% endifnotequal %}
+{% endifnotequal %}

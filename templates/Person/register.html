@@ -1,0 +1,147 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>CodeChamps Register </title>
+    {% include 'includes.html' %}
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css"
+          media="all"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"
+            type="text/javascript"></script>
+    <style>
+        #container {
+            display: block;
+            position: relative;
+        }
+
+        .ui-autocomplete {
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+{% include 'index_navbar.html' %}
+<script>
+    $(document).ready(function () {
+        $("#password1").keyup(checkPasswordMatch);
+
+    });
+    function checkPasswordMatch() {
+        var password = $("#password").val();
+        var confirmPassword = $("#password1").val();
+        if (password != "")
+            if (password != confirmPassword)
+                $("#match").html("<p></b>Passwords do not match!</b></p>");
+            else
+                $("#match").html("<p></b>Passwords match!</b></p>");
+    }
+    $(function () {
+        $("#registerform").validate({
+            rules: {
+                username: {
+                    required: true,
+                    minlength: 6
+
+                },
+                password: {
+                    required: true
+                },
+                password1: {
+                    required: true
+
+                },
+                email: {
+                    required: true
+                },
+                name: {
+                    required: true
+                },
+                college: {
+                    required: true
+                },
+                country: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 50
+
+                }
+
+            },
+            messages: {
+                username: {
+                    required: "Give me your username"
+                },
+                password: {
+                    required: "Password Required"
+                },
+                password1: {
+                    required: "Retype Password"
+                },
+                name: {
+                    required: "What? You don't have a name!"
+                },
+                email: {
+                    required: "We need this to stay in touch!"
+                },
+                country: {
+                    required: "Where are you from?"
+                },
+                college: {
+                    required: "Where do you Study?"
+                }
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        alert('in here');
+        $("#college").autocomplete({
+            source: "/get_colleges/",
+            minLength: 1,
+            appendTo: "#container"
+        });
+    });
+</script>
+
+<div class="row">
+
+    <div class="col-md-8">
+        <br><br>
+        <center><img class="thumbnail" src="{% static 'img/codechamps-logo.PNG' %}"></center>
+        <center><h2>LEARN,PRACTICE,COMPETE</h2></center>
+    </div>
+    <div class="col-md-3">
+        {% if form.errors %}
+            <p>{{ form.errors }}</p>
+        {% endif %}
+        <form id="registerform" class='form-horizontal' method="post" action="/register/">
+            {% csrf_token %}
+            <input class="form-control" id="username" name="username" type="text" placeholder="Username"/><br>
+            <input class="form-control" id="name" name="name" type="text" placeholder="Name"/><br>
+            <input class="form-control" id="college" name="college" type="text" placeholder="college"/>
+            <div id="container"></div><br>
+            <input class="form-control" type="email" id="email" name='email' placeholder='Your email'/><br>
+            <input class="form-control" type="password" id="password" name='password' placeholder='Password'/><br>
+            <input class="form-control" type="password" id="password1" name='password1'
+                   placeholder='Re-enter your password'/><br>
+            <label for="role">You Are A:</label>
+            <select class="form-control" id="role" name="role">
+                <option>TEACHER</option>
+                <option>STUDENT</option>
+            </select>
+
+            <div id="match"></div>
+            <br>
+            <input class="btn btn-primary " type="submit" value="Register" align="right"><br>
+        </form>
+        <h4>
+            Already an User? <a href="/">Login</a> now!
+        </h4>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    {% include 'includes.html' %}
+    <title>{{ quiz.title }} Results</title>
+    {{ message }}
+</head>
+<body>
+{% include 'navbar.html' %}
+</body>
+{% block content %}
+    <h2>{{ quiz.title }}</h2>
+    <h3>{{ quiz.category }}</h3>
+
+    <p>{{ quiz.description }}</p>
+    <p>{{ url }}</p>
+    <p>
+        {% for q in questions %}
+            <p>{{ q.id }}</p>
+            <p>{{ q}}
+            <p>{{ q.get_answers }}<p>
+        {% endfor %}
+        </p>
+{% endblock %}

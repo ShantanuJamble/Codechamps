@@ -1,0 +1,65 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+    function getUserAnswer() {
+        var ans = validate();
+        if (ans != null) {
+            $.ajax({
+                type: "POST",
+                url: "/checkans/{{ question.id }}/",
+                data: {"choice": ans,
+                    "sitting_id": $("#sitting_id").text()},
+                success: successfunction,
+                headers: {'X-CSRFToken': csrftoken},
+                dataType: 'json'
+            });
+        }
+    }
+    function successfunction(data, status, jqXHR) {
+       // $("#answer_accepted").text(data.marks); THIS UPDATES MARLKS IN THAT QUOTE
+        $("#answer_accepted").html("<h5>Answer Submmited</h5>");
+    }
+    function validate() {
+        var radios;
+        var i;
+        var choice = null;
+        radios = document.getElementById("options").getElementsByTagName("input");
+        for (i = 0; i < radios.length; i++) {
+            if (radios[i].checked == true) {
+                choice = radios[i].value;
+            }
+        }
+        return choice;
+    }
+</script>
+
+<h3 id="sitting_id" hidden="hidden">{{ sitting_id}}</h3>
+<div id="answer_accepted">
+    <h4 hidden="hidden">{{ marks }}</h4>
+</div>
+<h2>{{ question }}</h2>
+<div id="options" >
+    {% for option in options %}
+        <span class="input-group-addon">
+        <input type="radio" value="{{ option }}" name="option" id="option">{{ option }}
+        </span>
+        <br>
+    {% endfor %}
+</div>
+<input type="button" class="btn btn-primary " onclick="getUserAnswer()" value="Submit">

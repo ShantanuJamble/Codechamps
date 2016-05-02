@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{{ problem_title }} Solution</title>
+    {% include 'includes.html' %}
+    {% include 'navbar.html' %}
+
+</head>
+<body>
+<div class="container ">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-7 well">
+            <p><b>Result:</b></p>
+            {% include 'submission_result.html' %}
+            <p><b>Language used:</b>&nbsp;&nbsp;<i id="lang-used">{{ lang_chosen }}</i></p>
+            <hr>
+            <div class="row">
+                <div class="col-md-12" aria-readonly="true" id="inner-editor" style="height:500px;">{{ solution }}</div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'js/ace-editor/ace.js' %}" type="text/javascript"
+        charset="utf-8"></script>
+<script>
+    $(document).ready(function () {
+        var editor = ace.edit("inner-editor");
+        var lang_used=$("#lang-used").text();
+        editor.setTheme("ace/theme/monokai");
+        if(lang_used=="cpp"||lang_used=="c")
+            editor.getSession().setMode("ace/mode/c_cpp");
+        else
+            editor.getSession().setMode("ace/mode/"+lang_used);
+
+        editor.setReadOnly(true);
+    });
+
+</script>
+</body>
+</html>
