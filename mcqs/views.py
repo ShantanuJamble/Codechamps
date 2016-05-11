@@ -1,11 +1,13 @@
 import json
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 # Create your views here.
+from challenges.models import QuizModel
+from challenges.views import quiz_dashboard
 from mcqs.models import MCQuestion, Sitting
 from person.models import Person
 
@@ -48,7 +50,7 @@ def get_mcq(request, slug):
 def accept_answer(request, slug):
     marks = 0
     # import pdb
-    #pdb.set_trace()
+    # pdb.set_trace()
     print 'in accept ans'
     if request.method == 'POST':
         question = MCQuestion.objects.get(id=slug)
@@ -78,6 +80,75 @@ def accept_answer(request, slug):
         sitting.save()
     else:
         marks = marks
-    #print marks
+    # print marks
     jason_data = json.dumps({'marks': marks})
     return HttpResponse(jason_data, content_type="application/json")
+
+
+# this method add question to a quiz
+def add_mcqs(mcqs, quiz):
+    for m in mcqs:
+        q = MCQuestion.objects.get(id=int(m))
+        q.quiz.add(quiz)
+        try:
+            q.save()
+        except:
+            print 'save failed'
+
+
+def delete_mcqs(mcqs, quiz, all=False):
+    all_mcqs = MCQuestion.objects.all()
+    if not all:
+        for q in all_mcqs:
+            print str(q.id) not in mcqs
+            if (q.id) not in mcqs and q.quiz == quiz:
+                print 'in here for ' + q
+                q.quiz.remove(quiz)
+            try:
+                q.save()
+            except:
+                print 'save failed'
+    else:
+        for q in all_mcqs:
+            q.quiz.remove(quiz)
+            try:
+                q.save()
+            except:
+                print 'save failed'
+
+
+def mcq_to_quiz(request):
+    print request.user.is_authenticated()
+    if not request.user.is_authenticated():
+        message = '404'
+        return render_to_response('404.html', locals(), context_instance=RequestContext(request))
+    person = Person.objects.get(user=request.user)
+    if person.role != "TEACHER":
+        message = '404'
+        return render_to_response('404.html', locals(), context_instance=RequestContext(request))
+    else:
+        quiz = QuizModel.objects.get(id=request.GET['quiz'])
+        print request.GET
+        mcqs = []
+        try:
+            print list(request.GET[u'mcqs'])
+            data = str(request.GET.get(u'mcqs'))
+            print data
+            for d in data:
+                try:
+                    i = int(d)
+                    mcqs.append(d)
+                except:
+                    pass
+            print(mcqs)
+        except:
+            mcqs = None
+        print mcqs
+        if mcqs:
+            if str(request.GET['to_do']) == 'add':
+                add_mcqs(mcqs, quiz)
+            elif str(request.GET['to_do']) == 'delete':
+                delete_mcqs(mcqs, quiz)
+        else:
+            delete_mcqs(mcqs, quiz, True)
+        return HttpResponseRedirect('/quiz_dashboard/' + str(quiz.id))

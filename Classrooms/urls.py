@@ -55,6 +55,7 @@ urlpatterns = patterns('',
                        url(r'^mcqs/(?P<slug>\d)/$', 'mcqs.views.get_mcq', name='mcq_detail'),
                        url(r'^checkans/(?P<slug>\d)/$', 'mcqs.views.accept_answer', name='check_answer'),
                        url(r'^mcqs/$', MCQListView.as_view(), name='mcq_list'),
+                       url(r'^add_mcqs', 'mcqs.views.mcq_to_quiz',name='Add_mcq_to_quiz'),
 
                        #college autocomplete url
                        url(r'^get_colleges/$','college.views.get_colleges',name='get_college'),

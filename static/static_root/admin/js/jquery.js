@@ -1439,7 +1439,7 @@ jQuery.support = (function() {
 	}
 
 	// Support: IE<9 (lack submit/change bubble), Firefox 17+ (lack focusin event)
-	// Beware of CSP restrictions (https://person.mozilla.org/en/Security/CSP), test/csp.php
+	// Beware of CSP restrictions (https://developer.mozilla.org/en/Security/CSP), test/csp.php
 	for ( i in { submit: true, change: true, focusin: true }) {
 		div.setAttribute( eventName = "on" + i, "t" );
 
@@ -6619,7 +6619,7 @@ var iframe, getStyles, curCSS,
 	ropacity = /opacity\s*=\s*([^)]*)/,
 	rposition = /^(top|right|bottom|left)$/,
 	// swappable if display is none or starts with table except "table", "table-cell", or "table-caption"
-	// see here for display values: https://person.mozilla.org/en-US/docs/CSS/display
+	// see here for display values: https://developer.mozilla.org/en-US/docs/CSS/display
 	rdisplayswap = /^(none|table(?!-c[ea]).+)/,
 	rmargin = /^margin/,
 	rnumsplit = new RegExp( "^(" + core_pnum + ")(.*)$", "i" ),

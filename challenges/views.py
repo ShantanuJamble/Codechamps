@@ -10,7 +10,7 @@ from challenges.forms import AddQuizForm
 from mcqs.forms import AddMcq2Quiz
 from person.models import Person
 from .models import QuizModel, Category
-from mcqs.models import Sitting
+from mcqs.models import Sitting, MCQuestion
 
 
 class QuizListView(ListView):
@@ -189,7 +189,7 @@ def quiz_dashboard(request, slug):
         if quiz is not None:
             message = 'Quiz Found'
             mcqform = AddMcq2Quiz()
-            print mcqform
+            mcqs=MCQuestion.objects.all().order_by('id')
             # 1.Form to add MCQ to quiz
             #2.Form to add Problems to quiz
             #3.Quiz stats
