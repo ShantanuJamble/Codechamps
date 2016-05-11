@@ -100,9 +100,9 @@ def delete_mcqs(mcqs, quiz, all=False):
     all_mcqs = MCQuestion.objects.all()
     if not all:
         for q in all_mcqs:
-            print str(q.id) not in mcqs
-            if (q.id) not in mcqs and q.quiz == quiz:
-                print 'in here for ' + q
+            print str(q.id) not in mcqs and quiz in q.quiz.all()
+            if str(q.id) not in mcqs and quiz in q.quiz.all():
+                print 'in here for ' + q.content
                 q.quiz.remove(quiz)
             try:
                 q.save()
@@ -128,11 +128,9 @@ def mcq_to_quiz(request):
         return render_to_response('404.html', locals(), context_instance=RequestContext(request))
     else:
         quiz = QuizModel.objects.get(id=request.GET['quiz'])
-        print request.GET
         mcqs = []
         try:
-            print list(request.GET[u'mcqs'])
-            data = str(request.GET.get(u'mcqs'))
+            data = str(request.POST.getlist(u'mcqs'))
             print data
             for d in data:
                 try:
