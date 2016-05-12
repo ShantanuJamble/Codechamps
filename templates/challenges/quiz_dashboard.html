@@ -11,16 +11,50 @@
 <body>
 {% include 'navbar.html' %}
 <div class="container-fluid">
-    {{ message }}
-    <h4>{{ quiz }}</h4>
-    <button type="button" class="btn btn-primary" data-target="#add_mcqs" data-toggle="modal"
-            id="mcqadd">Add MCQS
-    </button>
-    <hr>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-4">
+            <h1 style="text-transform: capitalize">{{ quiz }}</h1>
+            <hr>
+            <h4>Stating Time: {{ quiz.start_time }}</h4>
+            <h4>Endinig Time: {{ quiz.end_time }}</h4>
 
-    <button type="button" class="btn btn-primary" data-target="#delete_mcqs" data-toggle="modal"
-            id="mcqadd">Remove MCQs
-    </button>
+        </div>
+        <div class="col-md-7">
+            <img src="{{ quiz.display_picture.url }}" class="img-thumbnail img-responsive"
+                 style="width:600px;height:300px;float:right;align:center;margin-right: 14.5%;">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-6">
+            <div class="well-lg">
+                <h3>Quiz Details:</h3>
+
+                <p class="text-primary" style="font-size: large">{{ quiz.description }}</p>
+                <hr>
+                <h3>Quiz Stats:</h3>
+
+                <p>Stats yenar ithe</p>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="well-lg">
+                <h3>Manage MCQs:</h3>
+                <div class="btn-group-vertical" role="group" aria-label="...">
+                    <button type="button" class="btn btn-primary" data-target="#add_mcqs" data-toggle="modal"
+                            id="mcqadd">Add MCQS
+                    </button>
+                    <hr>
+
+                    <button type="button" class="btn  btn-danger" data-target="#delete_mcqs" data-toggle="modal"
+                            id="mcqadd">Remove MCQs
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 </body>
 <!--add mcq to quiz modal-->
