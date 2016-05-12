@@ -2,7 +2,7 @@ import subprocess
 import time
 import signal
 # from Problems.models import Problem
-import psutil
+#import psutil
 from Problems.models import Problem
 
 __author__ = 'shantya'

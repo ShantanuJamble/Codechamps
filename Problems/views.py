@@ -128,7 +128,7 @@ def modify_problem(request, problem_id):
                 problem.domain = Category.objects.get(category=form.cleaned_data['domain'])
                 problem.difficulty = form.cleaned_data['difficulty']
                 problem.test_time = form.cleaned_data['test_time']
-                problem.quiz=(QuizModel.objects.get(title=form.cleaned_data['quiz']))
+                problem.quiz = (QuizModel.objects.get(title=form.cleaned_data['quiz']))
                 problem.save()
                 get_files(request, problem.title)
                 message = 'Problem Updated Succesfully!!'
@@ -155,7 +155,7 @@ def modify_problem(request, problem_id):
             message = 'Problem not found'
         return render_to_response('modify_problem.html',
                                   {'message': message, 'form': addProblemForm, 'problem': problem,
-                                   'category_list': category_list, 'person': person,'quiz_list':quiz_list},
+                                   'category_list': category_list, 'person': person, 'quiz_list': quiz_list},
                                   context_instance=RequestContext(request))
 
 
@@ -242,3 +242,69 @@ def get_program(request, slug):
     except:
         marks = 0
     return render_to_response('raw_poblem_page.html', locals(), context_instance=RequestContext(request))
+
+
+# this method add question to a quiz
+def add_prgs(prgs, quiz):
+    for m in prgs:
+        q = Problem.objects.get(id=int(m))
+        q.quiz = quiz
+        try:
+            q.save()
+        except:
+            print 'save failed'
+
+
+def delete_prgs(prgs, quiz, all=False):
+    all_prgs = Problem.objects.all()
+    if not all:
+        for q in all_prgs:
+            print str(q.id) not in prgs and quiz == q.quiz
+            if str(q.id) not in prgs and quiz == q.quiz:
+                q.quiz = None
+            try:
+                q.save()
+            except:
+                print 'save failed'
+    else:
+        for q in all_prgs:
+            q.quiz = None
+            try:
+                q.save()
+            except:
+                print 'save failed'
+
+
+def prg_to_quiz(request):
+    print request.user.is_authenticated()
+    if not request.user.is_authenticated():
+        message = '404'
+        return render_to_response('404.html', locals(), context_instance=RequestContext(request))
+    person = Person.objects.get(user=request.user)
+    if person.role != "TEACHER":
+        message = '404'
+        return render_to_response('404.html', locals(), context_instance=RequestContext(request))
+    else:
+        quiz = QuizModel.objects.get(id=request.GET['quiz'])
+        prgs = []
+        try:
+            data = str(request.POST.getlist(u'prgs'))
+            print data
+            for d in data:
+                try:
+                    i = int(d)
+                    prgs.append(d)
+                except:
+                    pass
+            print(prgs)
+        except:
+            prgs = None
+        print prgs
+        if prgs:
+            if str(request.GET['to_do']) == 'add':
+                add_prgs(prgs, quiz)
+            elif str(request.GET['to_do']) == 'delete':
+                delete_prgs(prgs, quiz)
+        else:
+            delete_prgs(prgs, quiz, True)
+        return HttpResponseRedirect('/quiz_dashboard/' + str(quiz.id))

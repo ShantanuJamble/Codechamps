@@ -35,26 +35,39 @@
                 <hr>
                 <h3>Quiz Stats:</h3>
 
-                <p>Stats yenar ithe</p>
+                <p>Students Participating:{{ regiter_count }}</p>
             </div>
         </div>
         <div class="col-md-5">
             <div class="well-lg">
                 <h3>Manage MCQs:</h3>
+
                 <div class="btn-group-vertical" role="group" aria-label="...">
                     <button type="button" class="btn btn-primary" data-target="#add_mcqs" data-toggle="modal"
-                            id="mcqadd">Add MCQS
+                            id="addmcq" style="width: 350px">Add MCQS
                     </button>
                     <hr>
 
                     <button type="button" class="btn  btn-danger" data-target="#delete_mcqs" data-toggle="modal"
-                            id="mcqadd">Remove MCQs
+                            id="deletemcq" style="width: 350px">Remove MCQs
                     </button>
+
+                    <h3>Manage Programs:</h3>
+
+                    <div class="btn-group-vertical" role="group" aria-label="...">
+                        <button type="button" class="btn btn-primary" data-target="#add_prgs" data-toggle="modal"
+                                id="addprg" style="width: 350px">Add Programs
+                        </button>
+                        <hr>
+
+                        <button type="button" class="btn  btn-danger" data-target="#delete_prgs" data-toggle="modal"
+                                id="deleteprg" style="width: 350px">Remove Programs
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 </body>
 <!--add mcq to quiz modal-->
@@ -123,5 +136,73 @@
         </div>
     </div>
 </div>
+
+
+<!--add prg to quiz modal-->
+<div class="modal fade" id="add_prgs" role="dialog">
+    <div class="modal-dialog" style="width:45%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Programs to {{ quiz }}</h3>
+            </div>
+            <form class="input-group" method="POST" action="/add_prgs/?quiz={{ quiz.id }}&to_do=add">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <select name='prgs' multiple class="form-control"
+                            id="prgs_select">
+                        {% for prg in prgs %}
+                            {% if quiz == prg.quiz %}
+                                <option value='{{ prg.id }}' selected='selected'>{{ prg }} </option>
+                            {% else %}
+                                <option value={{ prg.id }}>{{ prg }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    <script type="text/javascript">addEvent(window, "load", function (e) {
+                        SelectFilter.init("prgs_select", "Programs", 1, "/static/");
+                    });</script>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type='submit' style="width: 100px">ADD</button>
+                    <button class="btn btn-danger" data-dismiss="modal" style="width: 100px">CLOSE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--delete mcq from quiz modal-->
+<div class="modal fade" id="delete_prgs" role="dialog">
+    <div class="modal-dialog" style="width:50%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Remove Programs from {{ quiz }}</h3>
+            </div>
+            <form class="input-group" method="POST" action="/add_prgs/?quiz={{ quiz.id }}&to_do=delete">
+                {% csrf_token %}
+                <div class="modal-body">
+
+                    <select name='prgs' multiple="multiple" class="form-control"
+                            id="prg_remove">
+                        {% for prg in prgs %}
+                            {% if quiz == prg.quiz %}
+                                <option value='{{ prg.id }}' selected='selected'>{{ prg }} </option>
+                            {% else %}
+                                <option value={{ prg.id }}>{{ prg }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    <script type="text/javascript">addEvent(window, "load", function (e) {
+                        SelectFilter.init("prg_remove", "Programs", 1, "/static/");
+                    });</script>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type='submit'>Remove</button>
+                    <button class="btn btn-danger" data-dismiss="modal">CLOSE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 </html>

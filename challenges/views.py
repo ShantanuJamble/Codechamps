@@ -6,6 +6,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import timezone
 from django.views.generic.list import ListView
+from Problems.models import Problem
 from challenges.forms import AddQuizForm
 from mcqs.forms import AddMcq2Quiz
 from person.models import Person
@@ -188,8 +189,9 @@ def quiz_dashboard(request, slug):
             quiz = None
         if quiz is not None:
             message = 'Quiz Found'
-            mcqform = AddMcq2Quiz()
             mcqs=MCQuestion.objects.all().order_by('id')
+            prgs=Problem.objects.all().order_by('id')
+            regiter_count=quiz.participants.count()
             # 1.Form to add MCQ to quiz
             #2.Form to add Problems to quiz
             #3.Quiz stats
