@@ -45,8 +45,8 @@ def register(request):
             user.save()
             person = Person(user=user, role=form.cleaned_data['role'])
             print form.cleaned_data['college']
-            person.college,created = College.objects.get_or_create(name=form.cleaned_data['college'])
-            #person.college =College.objects.get(name=form.cleaned_data['college'])
+            person.college, created = College.objects.get_or_create(name=form.cleaned_data['college'])
+            # person.college =College.objects.get(name=form.cleaned_data['college'])
             person.save()
             if person.role == 'TEACHER':
                 grp = Group.objects.get(name='teachers')
@@ -277,3 +277,10 @@ def password_change(request):
                                       context_instance=RequestContext(request))
     else:
         return render_to_response('updatesuccess.html', {'message': 'error'}, context_instance=RequestContext(request))
+
+
+def search_bar(request):
+    query = request.GET['search-term']
+    print query
+    results = Person.objects.all().filter(name__contains=query)[5]
+    return render_to_response('searchbar_template.html', locals(), context_instance=RequestContext(request))

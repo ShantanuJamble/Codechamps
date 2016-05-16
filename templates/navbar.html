@@ -1,5 +1,63 @@
 {% load static %}
+
 {% include 'includes.html' %}
+<style>
+    #container {
+        display: block;
+        position: relative;
+    }
+
+    .ui-autocomplete {
+        position: absolute;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        // using jQuery
+        //alert('sdvbgfhl');
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+        //Password Updation Ajax query
+        $("#search-term").keyup(function () {
+            var term = $("#search-term").val();
+            alert(term.toString());
+            {
+                $.ajax({
+                    type: "GET",
+                    url: "/search/?search_term="+term,
+                    success: updateSuccess,
+                    headers: {
+                        'X-CSRFToken': csrftoken
+                    },
+                    dataType: 'html'
+                });
+                //alert($("#search").val());
+            }
+            return false;
+        });
+        function updateSuccess(data, status, jqXHR) {
+            alert(status);
+            $("#container").html(data);
+        }
+
+    })
+</script>
 <div class="navbar navbar-default " role="navigation" style="border-radius: 0px">
     <div class="container-fluid">
         <div class="navbar-header"><a class="navbar-brand" href="/">CodeChamps</a>
@@ -49,8 +107,10 @@
 
                         <form class="navbar-form" role="search">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search" name="srch-term"
-                                       id="srch-term">
+                                <input type="text" class="form-control" placeholder="Search" name="search-term"
+                                       id="search-term">
+
+                                <div id="container"></div>
 
                                 <div class="input-group-btn">
                                     <button class="btn btn-default" type="submit"><i

@@ -60,6 +60,8 @@ urlpatterns = patterns('',
 
                        # college autocomplete url
                        url(r'^get_colleges/$', 'college.views.get_colleges', name='get_college'),
-                       url(r'^college/$', 'college.views.home', name='college_home')
+                       url(r'^college/$', 'college.views.home', name='college_home'),
 
+                       #search
+                       url(r'^search/$','person.views.search_bar',name='seach_bar_url')
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
