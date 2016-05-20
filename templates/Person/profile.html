@@ -27,9 +27,10 @@
         <strong>Warning!</strong> {{ activate_message }}
     </div>
 {% endif %}
-
+<a href="/search/?term=q">haha</a>
 {% include 'navbar.html' %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
 <div class="row">
     <div class="col-md-1"></div>
     <!--Profile pic block-->
@@ -74,24 +75,26 @@
                 <button type="button" class="btn btn-primary ">Follow</button>
             </a>
         {% endifequal %}
-        {% ifequal person_profile.role 'TEACHER' %}
-            <a title="To add new Problems" href='/problems/add_problem'>
-                <button type="button" class="btn btn-primary" id="add">
-                    Add Problem
-                </button>
-            </a>
-            <hr>
-            <a title="To list all the problems you added" href='/problems/list_problems'>
-                <button type="button" class="btn btn-primary" id="list">
-                    List Problems
-                </button>
-            </a>
-            <hr>
-             <a title="To create new quizes!" href='/add_quiz/'>
-                <button type="button" class="btn btn-primary" id="list">
-                    Add new Quiz
-                </button>
-            </a>
+        {% ifequal message 'null' %}
+            {% ifequal person_profile.role 'TEACHER' %}
+                <a title="To add new Problems" href='/problems/add_problem'>
+                    <button type="button" class="btn btn-primary" id="add">
+                        Add Problem
+                    </button>
+                </a>
+                <hr>
+                <a title="To list all the problems you added" href='/problems/list_problems'>
+                    <button type="button" class="btn btn-primary" id="list">
+                        List Problems
+                    </button>
+                </a>
+                <hr>
+                <a title="To create new quizes!" href='/add_quiz/'>
+                    <button type="button" class="btn btn-primary" id="list">
+                        Add new Quiz
+                    </button>
+                </a>
+            {% endifequal %}
         {% endifequal %}
     </div>
 </div>
