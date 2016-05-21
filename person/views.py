@@ -1,3 +1,4 @@
+import json
 import random
 import hashlib
 import uuid
@@ -8,6 +9,7 @@ from django.core.mail import send_mail
 from django.shortcuts import render_to_response, Http404, HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from Classrooms.settings import *
+from challenges.models import QuizModel
 from college.models import College
 from .models import Person, EmailConfirmed
 from .forms import RegistraionForm, LoginForm, ResetForm, UpdateForm, PasswordResetForm
@@ -45,8 +47,8 @@ def register(request):
             user.save()
             person = Person(user=user, role=form.cleaned_data['role'])
             print form.cleaned_data['college']
-            person.college,created = College.objects.get_or_create(name=form.cleaned_data['college'])
-            #person.college =College.objects.get(name=form.cleaned_data['college'])
+            person.college, created = College.objects.get_or_create(name=form.cleaned_data['college'])
+            # person.college =College.objects.get(name=form.cleaned_data['college'])
             person.save()
             if person.role == 'TEACHER':
                 grp = Group.objects.get(name='teachers')
@@ -277,3 +279,40 @@ def password_change(request):
                                       context_instance=RequestContext(request))
     else:
         return render_to_response('updatesuccess.html', {'message': 'error'}, context_instance=RequestContext(request))
+
+'''
+def search_bar(request):
+    if request.is_ajax():
+        query = request.GET.get('search-term')
+        if len(query) >= 1:
+            user_results = User.objects.all().filter(first_name__startswith=query)[:5]
+            if len(user_results) < 5:
+                quiz_results = QuizModel.objects.all().filter(title__startswith=query)[:5 - len(user_results)]
+            return render_to_response('searchbar_template.html', locals(), context_instance=RequestContext(request))
+'''
+
+def search_bar(request):
+    print request
+    if request.is_ajax():
+        query = request.GET.get('term', '')
+        user_results = User.objects.all().filter(first_name__startswith=query)[:5]
+        result_all = []
+        for user in user_results:
+            tmp = {}
+            tmp['id'] = user.id
+            tmp['label'] = user.first_name
+            tmp['value'] = '/profile/' + user.username
+            result_all.append(tmp)
+        if len(result_all) < 5:
+            quiz_results = QuizModel.objects.all().filter(title__startswith=query)[:5 - len(user_results)]
+            for quiz in quiz_results:
+                tmp = {}
+                tmp['id'] = quiz.id
+                tmp['label'] = quiz.title
+                tmp['value'] = '/challenges/' + quiz.url
+                result_all.append(tmp)
+        data = json.dumps(result_all)
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)

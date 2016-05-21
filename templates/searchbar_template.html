@@ -1,0 +1,9 @@
+{% for res in user_results %}
+    <a href="/profile/{{ res.username }}">{{ res.first_name }}</a>
+{% endfor %}
+
+{% for res in quiz_results %}
+    <ul>
+        <li>{{ res }}</li>
+    </ul>
+{% endfor %}
