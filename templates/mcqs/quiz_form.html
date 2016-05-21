@@ -53,7 +53,6 @@
 
         function get_program(question_id) {
             {
-                alert(""+question_id);
                 $.ajax({
                     type: "POST",
                     url: "/get/program/" + question_id.toString() + '/',
@@ -71,7 +70,6 @@
         }
 
         function updateQuestion(data, status, jqXHR) {
-            alert('asdg');
             $("#question_details").html(data);
         }
     </script>
