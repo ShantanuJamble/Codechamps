@@ -30,8 +30,9 @@
         <div class="col-md-6">
             <div class="well-lg">
                 <h3>Quiz Details:</h3>
-
+                {% autoescape off %}
                 <p class="text-primary" style="font-size: large">{{ quiz.description }}</p>
+                {% endautoescape %}
                 <hr>
                 <h3>Quiz Stats:</h3>
 

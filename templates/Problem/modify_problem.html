@@ -125,7 +125,7 @@
             <center><h3 style="color: #161f29">PROBLEM FORM</h3></center>
         </div>
         <div class="col-md-5">
-            {{ message }}
+            <div class="alert alert-info"> {{ message }}</div>
 
             <form id="problem_form" class='form-horizontal' method="POST" enctype="multipart/form-data"
                   action="/problems/modify/{{ problem.id }}">
@@ -172,7 +172,7 @@
                     {% endfor %}
                 </select>
                 <br>
-                <label for="quiz">Add problem to quiz:</label>
+               <!--- <label for="quiz">Add problem to quiz:</label>
                 <select class="form-control" name="quiz" id="quiz" >
                     {% for quiz in quiz_list %}
                         {% if quiz == problem.quiz %}
@@ -182,7 +182,7 @@
                         {% endif %}
                     {% endfor %}
                 </select>
-                <br>
+                <br>--->
                 <center><input class="btn btn-primary" type="submit" value="ModifyProblem"/></center>
             </form>
         </div>
