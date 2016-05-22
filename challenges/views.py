@@ -166,8 +166,7 @@ def add_quiz(request):
                 quiz.display_picture = request.FILES['dp']
                 quiz.save()
                 message = 'Quiz Added Successfully'
-                return render_to_response('challenges/quiz_dashboard.html', locals(),
-                                          context_instance=RequestContext(request))
+                return HttpResponseRedirect('/quiz_dashboard/'+str(quiz.id))
             else:
                 message = 'Sorry Something Went wrong. Please try again!'
                 return render_to_response('add_new_quiz.html', locals(), context_instance=RequestContext(request))

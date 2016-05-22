@@ -65,5 +65,4 @@ class addProblemForm(forms.Form):
     input_files = MultiFileField(max_num=10, min_num=1,)
     output_files = MultiFileField(max_num=10, min_num=1,)
     domain = forms.CharField(label='doamin', max_length=50)
-    quiz = forms.CharField(label='doamin', max_length=50)
     difficulty=forms.CharField(label='difficulty', max_length=8)
