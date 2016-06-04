@@ -280,39 +280,43 @@ def password_change(request):
     else:
         return render_to_response('updatesuccess.html', {'message': 'error'}, context_instance=RequestContext(request))
 
-'''
+
 def search_bar(request):
     if request.is_ajax():
         query = request.GET.get('search-term')
         if len(query) >= 1:
-            user_results = User.objects.all().filter(first_name__startswith=query)[:5]
+            user_results = User.objects.all().filter(first_name__contains=query)[:5]
             if len(user_results) < 5:
-                quiz_results = QuizModel.objects.all().filter(title__startswith=query)[:5 - len(user_results)]
+                quiz_results = QuizModel.objects.all().filter(title__contains=query)[:5 - len(user_results)]
             return render_to_response('searchbar_template.html', locals(), context_instance=RequestContext(request))
 '''
 
 def search_bar(request):
-    print request
+    #print request
     if request.is_ajax():
-        query = request.GET.get('term', '')
-        user_results = User.objects.all().filter(first_name__startswith=query)[:5]
-        result_all = []
-        for user in user_results:
-            tmp = {}
-            tmp['id'] = user.id
-            tmp['label'] = user.first_name
-            tmp['value'] = '/profile/' + user.username
-            result_all.append(tmp)
-        if len(result_all) < 5:
-            quiz_results = QuizModel.objects.all().filter(title__startswith=query)[:5 - len(user_results)]
-            for quiz in quiz_results:
+        query = request.GET.get('search-term', '')
+        if query != "":
+            user_results = User.objects.all().filter(first_name__contains=query)[:5]
+            result_all = []
+            for user in user_results:
                 tmp = {}
-                tmp['id'] = quiz.id
-                tmp['label'] = quiz.title
-                tmp['value'] = '/challenges/' + quiz.url
-                result_all.append(tmp)
-        data = json.dumps(result_all)
+                tmp['id'] = user.id
+                tmp['label'] = user.first_name
+                tmp['value'] = '/profile/' + user.username
+                result_all.append(tmp['label'])
+            if len(result_all) < 5:
+                quiz_results = QuizModel.objects.all().filter(title__contains=query)[:5 - len(user_results)]
+                for quiz in quiz_results:
+                    tmp = {}
+                    tmp['id'] = quiz.id
+                    tmp['label'] = quiz.title
+                    tmp['value'] = '/challenges/' + quiz.url
+                    result_all.append(tmp['label'])
+            data = json.dumps(result_all)
+        else:
+            data =""
     else:
         data = 'fail'
     mimetype = 'application/json'
     return HttpResponse(data, mimetype)
+'''
