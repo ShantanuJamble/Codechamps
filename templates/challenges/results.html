@@ -3,12 +3,19 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head lang="en">
     <meta charset="UTF-8">
-    <title>{{ quiz.title }} Resulr</title>
+    <title>{{ quiz.title }} Result</title>
     {% include 'includes.html' %}
 </head>
 <body>
-    {% include 'navbar.html' %}
-    {{ quiz }}
-    <h1>You Have Completed the quiz!! </h1>
-    <h3>Your Score:{{ new_sitting.score }}</h3>
+{% include 'navbar.html' %}
+<div class="container-fluid">
+    <div class="well">
+        <center><h3>{{ quiz }}</h3>
+
+        <h1>You Have Completed the quiz!! </h1>
+
+        <h3>Your Score:{{ new_sitting.score }}</h3>
+            </center>
+    </div>
+</div>
 </body>

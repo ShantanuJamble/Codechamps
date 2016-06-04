@@ -2,7 +2,7 @@ import subprocess
 import time
 import signal
 # from Problems.models import Problem
-#import psutil
+# import psutil
 from Problems.models import Problem
 
 __author__ = 'shantya'
@@ -220,12 +220,14 @@ def process_submission(username, problem_title, source, lang_chosen, test_time, 
     # 4.getresult and update marks and status
     save_path = os.path.join(BASE_DIR, 'static', 'media', 'submissions', username, problem_title)
     duplicate = check_duplicate(save_path, source, lang_chosen)
+
     status = ''
     marks = 0
     res = None
     languages = ('c', 'cpp', 'java', 'python')
     save_extension = ('c', 'cpp', 'java', 'py')
     index = languages.index(lang_chosen)
+
     if duplicate:
         clear_file(save_path)
         status = 'duplicate'

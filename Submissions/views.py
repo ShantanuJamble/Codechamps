@@ -31,7 +31,6 @@ def save_submission(problem_id, username, status, marks, lang_chosen):
 
 def accept_submission(request):
     form = SubmissionForm()
-    print "bitch"
     if not request.user.is_authenticated():
         HttpResponseRedirect("/login/")
     try:

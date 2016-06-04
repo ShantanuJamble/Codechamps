@@ -3,10 +3,16 @@ from django.shortcuts import render, render_to_response
 
 # Create your views here.
 from django.template import RequestContext
+from django.views.generic import ListView
 from course.models import Course
 from person.models import Person
 
-
+@login_required(login_url='/')
+def course_list(request):
+    course_list = Course.objects.all()
+    person = Person.objects.get(user=request.user)
+    course_list=course_list.filter(college=person.college)
+    return render_to_response('course_list.html', locals(), context_instance=RequestContext(request))
 @login_required(login_url='/')
 def add_course(request):
     person = Person.objects.get(user=request.user)
@@ -43,7 +49,7 @@ def course_dashboard(request, course_code):
 
 @login_required(login_url='/')
 def enroll(request):
-    person=Person.objects.get(user=request.user)
+    person = Person.objects.get(user=request.user)
     task = request.GET['task']
     course_code = request.GET['course_code']
     print course_code
@@ -53,9 +59,10 @@ def enroll(request):
         if task == u'enroll':
             course.save()
             enrolled = True
-            return course_dashboard(request,course_code)
+            return course_dashboard(request, course_code)
         elif task == u'stats':
-            #stas page
+            # stas page
+            count=course.students.count
             return render_to_response('course_stats.html', locals(), context_instance=RequestContext(request))
     except Exception as e:
         print e

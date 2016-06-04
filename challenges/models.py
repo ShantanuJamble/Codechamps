@@ -13,6 +13,7 @@ from django.utils.encoding import python_2_unicode_compatible
 
 
 # Create your models here
+from course.models import Course
 from person.models import Person
 
 
@@ -86,7 +87,7 @@ class QuizModel(models.Model):
     participants = models.ManyToManyField(User, blank=True, null=True)
     display_picture = models.ImageField(upload_to='competitions/',blank=True,null=True)
     added_by=models.ForeignKey(Person,null=False,blank=False,default=1)
-    unique_together = ("t   itle", "url")
+    unique_together = ("title", "url")
 
     class Meta:
         verbose_name = _("Quiz")

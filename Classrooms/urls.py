@@ -69,4 +69,5 @@ urlpatterns = patterns('',
                        url(r'^add_course/$', 'course.views.add_course', name='add_course'),
                        url(r'^course/(?P<course_code>.*)/$', 'course.views.course_dashboard', name='course_dashboard'),
                        url(r'^course/$', 'course.views.enroll', name='course_enroll'),
+                       url(r'^course_list/$', 'course.views.course_list', name='course_list'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
