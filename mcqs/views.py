@@ -64,7 +64,7 @@ def accept_answer(request, slug):
         if question.check_if_correct(user_answer):
             print 1
             if answer_set[index] != '1':
-                marks += 1
+                marks += question.marks
                 answer_set[index] = '1'
 
         else:

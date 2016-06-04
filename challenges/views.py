@@ -7,6 +7,7 @@ from django.template import RequestContext
 from django.utils import timezone
 from django.views.generic.list import ListView
 from Problems.models import Problem
+from Submissions.models import Submission
 from challenges.forms import AddQuizForm
 from mcqs.forms import AddMcq2Quiz
 from person.models import Person
@@ -37,10 +38,15 @@ def start_quiz(request, quiz_id):
         message = 'You have completed the test already!'
     else:
         allowed = True
-        questions = str(new_sitting.question_order)
-        programs = str(new_sitting.programs)
-        questions = questions.split(',')
-        programs = programs.split(',')
+        questions = None
+        programs = None
+        if new_sitting.question_order is not None:
+            questions = str(new_sitting.question_order)
+            questions = questions.split(',')
+
+        if new_sitting.programs is not None:
+            programs = str(new_sitting.programs)
+            programs = programs.split(',')
         try:
             if new_sitting.start_time is None:
                 new_sitting.start_time = datetime.now()
@@ -75,7 +81,23 @@ def exit_quiz(request, quiz_id):
     new_sitting = Sitting.objects.user_sitting(request.user, quiz)
     try:
         new_sitting.complete = True
-
+        programs = new_sitting.programs.split(',')
+        print programs
+        prg_marks = 0
+        for prg in programs:
+            tmp_marks = 0
+            submissions = Submission.objects.all().filter(problem_id=int(prg))
+            for sub in submissions:
+                print sub
+                if tmp_marks < int(sub.marks):
+                    tmp_marks = int(sub.marks)
+                print tmp_marks
+            prg_marks += tmp_marks
+        try:
+            new_sitting.score = prg_marks + int(new_sitting.score)
+        except Exception as e:
+            print e
+        print new_sitting.score
         new_sitting.save()
     except:
         print 'Saving failed'
@@ -166,7 +188,7 @@ def add_quiz(request):
                 quiz.display_picture = request.FILES['dp']
                 quiz.save()
                 message = 'Quiz Added Successfully'
-                return HttpResponseRedirect('/quiz_dashboard/'+str(quiz.id))
+                return HttpResponseRedirect('/quiz_dashboard/' + str(quiz.id))
             else:
                 message = 'Sorry Something Went wrong. Please try again!'
                 return render_to_response('add_new_quiz.html', locals(), context_instance=RequestContext(request))
@@ -188,12 +210,12 @@ def quiz_dashboard(request, slug):
             quiz = None
         if quiz is not None:
             message = 'Quiz Found'
-            mcqs=MCQuestion.objects.all().order_by('id')
-            prgs=Problem.objects.all().order_by('id')
-            regiter_count=quiz.participants.count()
+            mcqs = MCQuestion.objects.all().order_by('id')
+            prgs = Problem.objects.all().order_by('id')
+            regiter_count = quiz.participants.count()
             # 1.Form to add MCQ to quiz
-            #2.Form to add Problems to quiz
-            #3.Quiz stats
+            # 2.Form to add Problems to quiz
+            # 3.Quiz stats
             return render_to_response('quiz_dashboard.html', locals(), context_instance=RequestContext(request))
         else:
             message = 'Quiz Does not exist'

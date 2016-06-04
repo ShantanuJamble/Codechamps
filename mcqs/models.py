@@ -31,7 +31,7 @@ class Question(models.Model):
                                    verbose_name=_('Explanation'))
     quiz = models.ManyToManyField(QuizModel, blank=True, null=True)
     category = models.ForeignKey(Category, null=True)
-
+    marks = models.IntegerField(blank=False, null=False, default=1)
     objects = InheritanceManager()
 
     class Meta:
@@ -126,18 +126,27 @@ class Answer(models.Model):
 
 class SittingManager(models.Manager):
     def format_string(self, answers_set, question_set, programs_set):
-        question_set = question_set.encode('ascii')
-        answers_set = answers_set.encode('ascii')
-        programs_set = programs_set.encode('ascii')
-        question_set = list(question_set)
-        answers_set = list(answers_set)
-        programs_set = list(programs_set)
-        answers_set[- 1] = ''
-        question_set[- 1] = ''
-        programs_set[-1] = ''
-        question_set = ''.join(question_set)
-        answers_set = ''.join(answers_set)
-        programs_set = ''.join(programs_set)
+        if len(question_set) != 0:
+            question_set = question_set.encode('ascii')
+            question_set = list(question_set)
+            question_set[- 1] = ''
+            question_set = ''.join(question_set)
+        else:
+            question_set = None
+        if len(answers_set) != 0:
+            answers_set = answers_set.encode('ascii')
+            answers_set = list(answers_set)
+            answers_set[- 1] = ''
+            answers_set = ''.join(answers_set)
+        else:
+            answers_set = None
+        if len(programs_set) != 0:
+            programs_set = programs_set.encode('ascii')
+            programs_set = list(programs_set)
+            programs_set[-1] = ''
+            programs_set = ''.join(programs_set)
+        else:
+            programs_set = None
         return answers_set, question_set, programs_set
 
     def new_sitting(self, user, quiz):
@@ -147,6 +156,8 @@ class SittingManager(models.Manager):
         else:
             questions = MCQuestion.objects.all().filter(quiz=quiz).order_by('id')
             programs = Problem.objects.all().filter(quiz=quiz).order_by('id')
+        print questions
+        print len(programs)
         question_set = ''
         answers_set = ''
         programs_set = ''
