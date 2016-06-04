@@ -86,7 +86,7 @@ class QuizModel(models.Model):
     participants = models.ManyToManyField(User, blank=True, null=True)
     display_picture = models.ImageField(upload_to='competitions/',blank=True,null=True)
     added_by=models.ForeignKey(Person,null=False,blank=False,default=1)
-    unique_together = ("title", "url")
+    unique_together = ("t   itle", "url")
 
     class Meta:
         verbose_name = _("Quiz")

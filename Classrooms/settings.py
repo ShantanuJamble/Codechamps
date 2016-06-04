@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -51,6 +52,7 @@ INSTALLED_APPS = (
     'challenges',
     'college',
     'datetimewidget',
+    'course',
 
 )
 
@@ -105,13 +107,13 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static', 'static_dirs'),
 )
 
-
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR,  'templates'),
-    os.path.join(BASE_DIR,  'templates', 'Person'),
-    os.path.join(BASE_DIR,  'templates','Problem'),
-    os.path.join(BASE_DIR,  'templates','mcqs'),
-    os.path.join(BASE_DIR,  'templates','challenges'),
-    os.path.join(BASE_DIR,'templates','Submission'),
+    os.path.join(BASE_DIR, 'templates'),
+    os.path.join(BASE_DIR, 'templates', 'Person'),
+    os.path.join(BASE_DIR, 'templates', 'Problem'),
+    os.path.join(BASE_DIR, 'templates', 'mcqs'),
+    os.path.join(BASE_DIR, 'templates', 'challenges'),
+    os.path.join(BASE_DIR, 'templates', 'Submission'),
+    os.path.join(BASE_DIR, 'templates', 'course'),
 
 )

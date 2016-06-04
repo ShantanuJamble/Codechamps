@@ -62,6 +62,11 @@ urlpatterns = patterns('',
                        url(r'^get_colleges/$', 'college.views.get_colleges', name='get_college'),
                        url(r'^college/$', 'college.views.home', name='college_home'),
 
-                       #search
-                       url(r'^search/$','person.views.search_bar',name='seach_bar_url')
+                       # search
+                       url(r'^search/$', 'person.views.search_bar', name='seach_bar_url'),
+
+                       # course
+                       url(r'^add_course/$', 'course.views.add_course', name='add_course'),
+                       url(r'^course/(?P<course_code>.*)/$', 'course.views.course_dashboard', name='course_dashboard'),
+                       url(r'^course/$', 'course.views.enroll', name='course_enroll'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

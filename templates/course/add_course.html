@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Add new Course!</title>
+    {% include 'includes.html' %}
+    <script src="http://cdn.ckeditor.com/4.5.2/standard-all/ckeditor.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            CKEDITOR.replace('body');
+        });
+    </script>
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="row">
+
+    <div class="col-md-3">
+        <center><h3 style="color: #161f29">ADD NEW COURSE</h3></center>
+    </div>
+    <div class="col-md-5">
+        {{ message }}
+        <form id="course_form" class='form-horizontal' method="POST" enctype="multipart/form-data"
+              action="/add_course/">
+            {% csrf_token %}
+            <input type="text" class="form-control" placeholder="Course Title" id="title"
+                   name="title"><br>
+            <input type="text" class="form-control" placeholder="Course Code" id="code"
+                   name="code"><br>
+            <textarea class="form-control" placeholder="Description" id="body" name="body" form="course_form">
+            </textarea>
+            <br>
+            <br>
+            <center><input class="btn btn-primary" type="submit" value="Add Course"/></center>
+        </form>
+    </div>
+</div>
+
+
+</body>
+</html>
